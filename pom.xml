@@ -140,7 +140,7 @@
 		-->
 		<checkstyle.max.allowed.violations>0</checkstyle.max.allowed.violations>
 		<github.global.server>github</github.global.server>
-		<jackson-bom.version>2.12.0</jackson-bom.version>
+		<jackson-bom.version>2.13.1</jackson-bom.version>
 		<java.version>1.8</java.version>
 		<jsw.dir>${project.build.directory}/generated-resources/appassembler/jsw/${package.daemon.name}</jsw.dir>
 		<kafka.version>1.1.1</kafka.version>
@@ -157,7 +157,7 @@
 		<powermock.version>1.7.1</powermock.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<slf4j.version>1.7.25</slf4j.version>
+		<slf4j.version>1.7.26</slf4j.version>
 		<verify.mutationThreshold>100</verify.mutationThreshold>
 		<verify.totalBranchRate>100</verify.totalBranchRate>
 		<verify.totalLineRate>100</verify.totalLineRate>
@@ -215,6 +215,11 @@
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>4.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.2</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-cli</groupId>
