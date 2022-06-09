@@ -44,6 +44,14 @@ import io.searchbox.indices.IndicesExists;
 import io.searchbox.indices.mapping.PutMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.ssl.TrustStrategy;
+import org.apache.http.ssl.SSLContextBuilder;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.HostnameVerifier;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.io.IOException;
@@ -104,15 +112,31 @@ public class ElasticWriter extends BaseOutputWriter {
 		JestClientFactory factory = new JestClientFactory();
 		HttpClientConfig httpClientConfig;
 
+		SSLContext sslContext = null;
+		try {
+			sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+				public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+					return true;
+				}
+			}).build();
+		} catch(Exception e) {
+			log.error("Error while creating ssl context for connection url [{}]", connectionUrl);
+		}
+
+		HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+    	SSLConnectionSocketFactory sslSF = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+		
 		if (username != null) {
 			log.info("Using HTTP Basic Authentication");
 			httpClientConfig = new HttpClientConfig.Builder(connectionUrl)
 					.defaultCredentials(username, password)
 					.multiThreaded(true)
+					.sslSocketFactory(sslSF)
 					.build();
 		} else {
 			httpClientConfig = new HttpClientConfig.Builder(connectionUrl)
 					.multiThreaded(true)
+					.sslSocketFactory(sslSF)
 					.build();
 		}
 
